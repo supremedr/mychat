@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% extends 'base.html' %}
 
-    <title>Simple chat</title>
-    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> {% endcomment %}
-</head>
-
-<body>
-    <h1>Simple chat</h1>
-
-
+{% block content %}
+{% if request.user.is_authenticated %}
     <form id="form">
         <input type="text" name="message"/>
+        <input type="hidden" name="user" value="{{ user.get_username }}">
     </form>
 
     <div id="messages"></div>
 
     <script type='text/javascript'>
-        let url= `ws://${window.location.host}/ws/socket-sever/`
+        let url= `ws://${window.location.host}/ws/socket-server/`
         const chatSocket = new WebSocket(url)
         chatSocket.onmessage = function(e){
             let data= JSON.parse(e.data)
@@ -30,7 +20,7 @@
                 let messages = document.getElementById('messages')
 
                 messages.insertAdjacentHTML('beforeend', `<div>
-                    <p>${data.message}</p>
+                    <p>${data.user}: ${data.message}</p>
                     </div>`)
             }
         }
@@ -39,13 +29,14 @@
         form.addEventListener('submit', (e)=> {
             e.preventDefault()
             let message = e.target.message.value 
+            let user = e.target.user.value 
             chatSocket.send(JSON.stringify({
                 'message':message,
+                'user':user,
             }))
             form.reset()
         })
 
     </script>
-
-</body>
-</html>
+{%endif%}
+{% endblock %}
