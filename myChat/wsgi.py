@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myChat.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myChat.settings.production')
 
 application = get_wsgi_application()
