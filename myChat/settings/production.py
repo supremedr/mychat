@@ -1,6 +1,6 @@
 from .base import *
 
-DEBUG = True
+DEBUG = False
 
 # Configure Django App for Heroku.
 import django_heroku
